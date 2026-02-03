@@ -10,6 +10,7 @@ import productRoutes from "./routes/product.routes.js";
 import dotenv from "dotenv";
 import cartRoutes from "./routes/cart.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import purchasedRoutes from "./routes/purchased.routes.js";
 dotenv.config();
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api/auth", authrouter);
 app.use("/api/category", categoryRoutes);
 app.use("/api/supplier", supplierRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/purchased", purchasedRoutes);
 
 app.use(globalerrorhandler);
 app.listen(process.env.PORT, () => {
