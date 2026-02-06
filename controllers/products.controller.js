@@ -33,7 +33,7 @@ const addProduct = async (req, res, next) => {
     const newproduct = new productModel({
       productPrice,
       productName,
-      productStock,
+      productStock: Number(productStock),
       category,
       productDescription,
       image: req.file.filename,
@@ -95,6 +95,7 @@ const updateProduct = async (req, res, next) => {
 
     const updatedData = {
       ...req.body,
+      productStock: Number(req.body.productStock),
     };
 
     if (req.file) {

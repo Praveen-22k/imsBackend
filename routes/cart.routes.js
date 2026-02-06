@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.post("/add", addToCart);
-router.get("/:id", getCart);
+router.get("/:userId", getCart);
 router.put("/increase/:itemId", increaseQty);
 router.put("/decrease/:itemId", decreaseQty);
 router.delete("/remove/:itemId", removeItem);

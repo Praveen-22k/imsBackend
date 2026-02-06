@@ -11,7 +11,34 @@ import dotenv from "dotenv";
 import cartRoutes from "./routes/cart.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import purchasedRoutes from "./routes/purchased.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 dotenv.config();
+
+// migration-script.js
+import mongoose from "mongoose";
+import Product from "./models/product.model.js";
+
+const migrateProductStock = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URL);
+
+    const products = await Product.find({});
+
+    for (const product of products) {
+      if (typeof product.productStock === "string") {
+        product.productStock = parseInt(product.productStock, 10) || 0;
+        await product.save();
+        console.log(`Updated product ${product._id}: ${product.productStock}`);
+      }
+    }
+
+    console.log("Migration completed!");
+    process.exit(0);
+  } catch (error) {
+    console.error("Migration failed:", error);
+    process.exit(1);
+  }
+};
 
 const app = express();
 app.use(express.json());
@@ -24,9 +51,10 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/supplier", supplierRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/purchased", purchasedRoutes);
-
+app.use("/api/admin", adminRoutes);
 app.use(globalerrorhandler);
 app.listen(process.env.PORT, () => {
   connectDB();
+
   console.log(`server is running ${process.env.PORT}`);
 });
